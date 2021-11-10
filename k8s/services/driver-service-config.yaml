@@ -1,0 +1,54 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: driver-service
+  labels:
+    app: driver-service
+data:
+  PORT: '8092'
+  DB_URL: jdbc:postgresql://postgres:5432/postgresdb
+  POSTGRES_USER: postgres
+  ORDER_SERVICE_ADDRESS: order-service:8093
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: driver-service
+  labels:
+    app: driver-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: driver-service
+  template:
+    metadata:
+      labels:
+        app: driver-service
+    spec:
+      containers:
+        - name: driver-service
+          image: matster07/taxi-driver-service:0.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8092
+          envFrom:
+            - configMapRef:
+                name: driver-service
+            - secretRef:
+                name: pgpassword
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: driver-service
+  labels:
+    app: driver-service
+spec:
+  type: ClusterIP
+  selector:
+    app: driver-service
+  ports:
+    - name: driver-service
+      port: 80
+      targetPort: 8092

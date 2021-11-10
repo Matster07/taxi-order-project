@@ -1,0 +1,53 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: order-service
+  labels:
+    app: order-service
+data:
+  PORT: '8093'
+  DB_URL: jdbc:postgresql://postgres:5432/postgresdb
+  POSTGRES_USER: postgres
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: order-service
+  labels:
+    app: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - name: order-service
+          image: matster07/taxi-order-service:0.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8093
+          envFrom:
+            - configMapRef:
+                name: order-service
+            - secretRef:
+                name: pgpassword
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: order-service
+  labels:
+    app: order-service
+spec:
+  type: ClusterIP
+  selector:
+    app: order-service
+  ports:
+    - name: order-service
+      port: 8093
+      targetPort: 8093

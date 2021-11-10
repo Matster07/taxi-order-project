@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:8094}
+  servlet:
+    context-path: api/order-history/v1
+spring:
+  datasource:
+    url: jdbc:${DB_HOST:postgresql://localhost:58460}/${DB_NAME:postgresdb}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      generate-ddl: true
