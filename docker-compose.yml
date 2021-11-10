@@ -17,7 +17,9 @@ services:
     hostname: customer-service
     container_name: customer-service
     environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+      DB_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     depends_on:
       - db
     ports:
@@ -27,7 +29,9 @@ services:
     hostname: driver-service
     container_name: driver-service
     environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+      DB_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     depends_on:
       - db
     ports:
@@ -37,7 +41,9 @@ services:
     hostname: order-service
     container_name: order-service
     environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+      DB_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     depends_on:
       - db
     ports:
@@ -47,7 +53,9 @@ services:
     hostname: order-history-service
     container_name: order-history-service
     environment:
-      - "SPRING_PROFILES_ACTIVE=dev"
+      DB_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     depends_on:
       - db
     ports:
